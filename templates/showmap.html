@@ -34,7 +34,25 @@
 <body>
 <div id="map"></div>
 <script>
-  var map = L.map('map').setView([11,79], 10);
+  // var map = L.map('map').setView([11,79], 10);
+
+  var map = L.map('map');
+
+// Use browser's geolocation API to get current location
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+
+      // Set map view to current location
+      map.setView([latitude, longitude], 16);
+      var marker = L.marker([latitude, longitude]).addTo(map);
+    });
+  } else {
+    // Fallback if geolocation is not supported
+    map.setView([11, 79], 10);
+  }
+
   data={};
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
